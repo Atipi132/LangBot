@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name" translatable="false">LangBot</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="message_to_send">Message</string>
+    <string name="message_size_default_text" translatable="false">0/550</string>
+    <string name="sendbuttontext">Send button</string>
+    <string name="microphonebuttontext">Use microphone button</string>
+    <string name="choose_languages">Choose languages</string>
+    <string name="help">Help</string>
+    <string name="language_to_learn">Language to learn</string>
+    <string name="native_language">Native language</string>
+    <string name="parameters">Parameters</string>
+    <string name="erase_current_conversation">Erase current conversation</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="message_size" translatable="false">%1$d/550</string>
+    <string name="language_to_learn_subtitle">Select the language that you want to learn</string>
+    <string name="nativelanguage_subtitle">Select your native language</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="about">About</string>
+    <string name="title_privacy_policy">Privacy policy</string>
+    <string name="title_permissions">Permissions</string>
+    <string name="text_application_logo">Application logo</string>
+    <string name="title_opensource_libraries">Open-source libraries</string>
+    <string name="title_about_me">About me</string>
+    <string name="description_privacy_policy">"This application is free and does not contain any advertisement. Therefore, <b>the only data that it (LangBot) collects is the current IP address provided when the user (you) sends a message.</b> This information is stored purely for security purposes. Although this data isn't shared with any third party (because ther is none!), note that it (the user's IP address) is stored on Amazon's AWS service, therfore AWS's privacy policy may apply concerning this data.  The service provided by LangBot uses Amazon's AWS service to store the user's IP address and OpenAI's ChatGPT Api to send the user's message to the Large Language Model. Therefore, their privacy policy may apply when sending a message using this application (LangBot). "</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="submit_button_text">Envoyer</string>
+    <string name="message_to_send">Message</string>
+    <string name="choose_languages">Choisir les langues</string>
+    <string name="help">Aide</string>
+    <string name="sendbuttontext">Bouton envoyer</string>
+    <string name="parameters">Paramètres</string>
+    <string name="erase_current_conversation">Effacer la conversation actuelle</string>
+    <string name="yes">OUI</string>
+    <string name="no">NON</string>
+    <string name="language_to_learn">Langue à apprendre</string>
+    <string name="native_language">Langue maternelle</string>
+    <string name="language_to_learn_subtitle">Sélectionnez la langue que vous souhaitez apprendre</string>
+    <string name="nativelanguage_subtitle">Sélectionnez votre langue maternelle</string>
+    <string name="tutorial">Tutoriel</string>
+    <string name="microphonebuttontext">Bouton pour utiliser le microphone</string>
+    <string name="about">À propos</string>
+    <string name="title_privacy_policy">Politique de confidentialité</string>
+    <string name="title_permissions">Permissions</string>
+    <string name="text_application_logo">Logo de l\'application</string>
+    <string name="title_opensource_libraries">Librairies Open-source</string>
+    <string name="title_about_me">À propos du développeur</string>
+</resources>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_app_name"
+        android:layout_margin="8dp"
+        android:text="@string/app_name"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        app:layout_constraintTop_toBottomOf="@id/appbar_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/app_logo"
+
+        app:layout_constraintTop_toBottomOf="@id/text_app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/text_application_logo" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:id="@+id/text_privacy_policy_title"
+        android:text="@string/title_privacy_policy"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        app:layout_constraintTop_toBottomOf="@id/app_logo"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_privacy_policy_description"
+        android:textSize="12sp"
+        android:text="@string/description_privacy_policy"
+        android:maxEms="25"
+
+        app:layout_constraintTop_toBottomOf="@id/text_privacy_policy_title"
+        app:layout_constraintStart_toStartOf="@id/text_privacy_policy_title" />
+
+    <View
+        android:id="@+id/divider0"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintTop_toBottomOf="@id/text_privacy_policy_description" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="8dp"
+        android:id="@+id/text_permissions_title"
+        android:text="@string/title_permissions"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        app:layout_constraintTop_toBottomOf="@id/divider0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_permissions_description"
+        android:textSize="12sp"
+        android:text="ef"
+
+        app:layout_constraintTop_toBottomOf="@id/text_permissions_title"
+        app:layout_constraintStart_toStartOf="@id/text_permissions_title" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintTop_toBottomOf="@id/text_permissions_description" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="8dp"
+        android:id="@+id/text_opensource_librairies_title"
+        android:text="@string/title_opensource_libraries"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_opensource_librairies_description"
+        android:textSize="12sp"
+        android:text="ef"
+
+        app:layout_constraintTop_toBottomOf="@id/text_opensource_librairies_title"
+        app:layout_constraintStart_toStartOf="@id/text_opensource_librairies_title" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintTop_toBottomOf="@id/text_opensource_librairies_description" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="8dp"
+        android:id="@+id/text_about_me_title"
+        android:text="@string/title_about_me"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        app:layout_constraintTop_toBottomOf="@id/divider2"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_about_me_description"
+        android:textSize="12sp"
+        android:text="ef"
+
+        app:layout_constraintTop_toBottomOf="@id/text_about_me_title"
+        app:layout_constraintStart_toStartOf="@id/text_about_me_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

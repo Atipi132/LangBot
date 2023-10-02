@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textview_languageToLearn"
+        android:text="@string/language_to_learn"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        app:layout_constraintTop_toBottomOf="@id/appbar_layout"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_languageToLearn_subtitle"
+        android:textSize="12sp"
+        android:text="@string/language_to_learn_subtitle"
+        android:maxEms="11"
+
+        app:layout_constraintTop_toBottomOf="@id/textview_languageToLearn"
+        app:layout_constraintStart_toStartOf="@id/textview_languageToLearn" />
+
+    <Spinner
+        android:id="@+id/spinner_languageToLearn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@id/textview_languageToLearn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textview_languageToLearn_subtitle" />
+
+    <View
+        android:id="@+id/divider0"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintTop_toBottomOf="@id/textview_languageToLearn_subtitle"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textview_nativeLanguage"
+        android:text="@string/native_language"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        app:layout_constraintTop_toBottomOf="@id/divider0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textview_nativeLanguage_subtitle"
+        android:textSize="12sp"
+        android:text="@string/nativelanguage_subtitle"
+        android:maxEms="11"
+
+        app:layout_constraintTop_toBottomOf="@id/textview_nativeLanguage"
+        app:layout_constraintStart_toStartOf="@id/textview_nativeLanguage" />
+
+    <Spinner
+        android:id="@+id/spinner_nativeLanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="@id/textview_nativeLanguage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textview_nativeLanguage_subtitle" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/darker_gray"
+
+        app:layout_constraintTop_toBottomOf="@id/textview_nativeLanguage_subtitle"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

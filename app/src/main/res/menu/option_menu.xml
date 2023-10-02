@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/choose_languages"
+        android:title="@string/choose_languages" />
+    <item
+        android:id="@+id/erase_current_conversation"
+        android:title="@string/erase_current_conversation" />
+    <item
+        android:id="@+id/help"
+        android:title="@string/help" />
+    <item
+        android:id="@+id/about"
+        android:title="@string/about" />
+</menu>
