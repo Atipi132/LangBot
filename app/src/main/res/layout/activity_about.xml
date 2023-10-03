@@ -139,7 +139,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/text_opensource_librairies_description"
         android:textSize="12sp"
-        android:text="ef"
+        android:text="TODO"
 
         app:layout_constraintTop_toBottomOf="@id/text_opensource_librairies_title"
         app:layout_constraintStart_toStartOf="@id/text_opensource_librairies_title" />
@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/text_about_me_description"
         android:textSize="12sp"
-        android:text="ef"
+        android:text="TODO"
 
         app:layout_constraintTop_toBottomOf="@id/text_about_me_title"
         app:layout_constraintStart_toStartOf="@id/text_about_me_title" />
