@@ -93,12 +93,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_permissions_description"
-        android:textSize="12sp"
-        android:text="ef"
+        android:layout_marginTop="4dp"
+        android:id="@+id/text_permission_internet"
+        android:text="@string/title_permission_internet"
+        android:textStyle="bold"
 
         app:layout_constraintTop_toBottomOf="@id/text_permissions_title"
-        app:layout_constraintStart_toStartOf="@id/text_permissions_title" />
+        app:layout_constraintStart_toStartOf="@id/text_permissions_title"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_permission_internet_description"
+        android:textSize="12sp"
+        android:maxEms="25"
+        android:text="@string/description_permission_internet"
+
+        app:layout_constraintTop_toBottomOf="@id/text_permission_internet"
+        app:layout_constraintStart_toStartOf="@id/text_permission_internet" />
 
     <View
         android:id="@+id/divider1"
@@ -107,7 +119,7 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/darker_gray"
 
-        app:layout_constraintTop_toBottomOf="@id/text_permissions_description" />
+        app:layout_constraintTop_toBottomOf="@id/text_permission_internet_description" />
 
     <TextView
         android:layout_width="wrap_content"
