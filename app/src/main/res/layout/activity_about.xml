@@ -137,9 +137,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_opensource_librairies_description"
+        android:id="@+id/text_opensource_libraries_description"
         android:textSize="12sp"
-        android:text="TODO"
+        android:text="@string/description_opensource_libraries"
 
         app:layout_constraintTop_toBottomOf="@id/text_opensource_librairies_title"
         app:layout_constraintStart_toStartOf="@id/text_opensource_librairies_title" />
@@ -151,7 +151,7 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/darker_gray"
 
-        app:layout_constraintTop_toBottomOf="@id/text_opensource_librairies_description" />
+        app:layout_constraintTop_toBottomOf="@id/text_opensource_libraries_description" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -171,7 +171,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/text_about_me_description"
         android:textSize="12sp"
-        android:text="TODO"
+        android:maxEms="25"
+        android:text="@string/description_about_me"
 
         app:layout_constraintTop_toBottomOf="@id/text_about_me_title"
         app:layout_constraintStart_toStartOf="@id/text_about_me_title" />
