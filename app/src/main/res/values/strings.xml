@@ -26,17 +26,9 @@
     <string name="description_privacy_policy">This application is free and does not contain any advertisement. Therefore, <b>the only data that it (LangBot) collects is the current IP address provided when the user (you) sends a message.</b> This information is stored purely for security purposes. Although this data isn\'t shared with any third party advertiser (because there is none!), note that it (the user\'s IP address) is stored on Amazon\'s AWS service, therefore AWS\'s privacy policy may apply concerning this data. \n\nThe service provided by LangBot uses Amazon\'s AWS service to store the user\'s IP address and OpenAI\'s ChatGPT Api to send the user\'s message to the Large Language Model, as well as Deepl and Reverso\'s APIs to translate/spell check the user\'s message. Therefore, <b>their privacy policy may apply when sending a message</b> using this application (LangBot).</string>
     <string name="description_permission_internet">This permission is necessary to send the message to the AWS server and get a response (which is the whole purpose of this app…).</string>
     <string name="title_permission_internet">Complete Internet Access</string>
-    <string name="description_about_me">This application has been created and is maintained up to date by Hugo Pothieux (me :)) as a side project to try and facilitate training when learning a new language. \n\n<b>Contact me</b>\n If you have any question, suggestion or if you found a bug, you can contact me via this email address.</string>
-    <string name="description_opensource_libraries">    implementation("androidx.datastore:datastore-preferences:1.0.0") 
-     implementation("androidx.core:core-ktx:1.12.0") 
-     implementation("androidx.appcompat:appcompat:1.6.1") 
-     implementation("com.google.android.material:material:1.9.0") 
-     implementation("androidx.constraintlayout:constraintlayout:2.1.4") 
-     implementation("com.aallam.openai:openai-client:3.3.0") 
-     implementation("io.ktor:ktor-client-android:2.3.3") 
-     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0-alpha02") 
-     implementation("com.squareup.okhttp3:okhttp:4.11.0") 
-     testImplementation("junit:junit:4.13.2") 
-     androidTestImplementation("androidx.test.ext:junit:1.1.5") 
-     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")</string>
+    <string name="description_about_me">This application has been created and is maintained up to date by Hugo Pothieux (me :)) as a side project to try and facilitate training when learning a new language. \n\n<b>Contact me</b>\nIf you have any question, suggestion or if you found a bug, you can contact me via this email address.</string>
+    <string name="description_opensource_libraries">
+        io.ktor:ktor-client-android:2.3.5
+        com.squareup.okhttp3:okhttp:4.11.0
+    </string>
 </resources>
