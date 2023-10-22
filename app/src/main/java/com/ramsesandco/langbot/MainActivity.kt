@@ -286,7 +286,7 @@ class MainActivity : AppCompatActivity() {
                     userTextView.tag = IS_HIDDEN
                     userCardView.setOnClickListener {
                         if (userTextView.tag == IS_HIDDEN) {
-                            if (listOf("en", "fr", "it", "es").contains(nativeLanguageAbbreviation)) userTextView.append("\n----------------------------------\n${getLocalizedString(applicationContext, Locale(nativeLanguageAbbreviation), R.string.mistake) + mistake}")
+                            if (listOf("en", "fr", "it", "es").contains(learnLanguageAbbreviation)) userTextView.append("\n----------------------------------\n${getLocalizedString(applicationContext, Locale(nativeLanguageAbbreviation), R.string.mistake) + mistake}")
                             else userTextView.append("\n----------------------------------\n$mistake")
                             userTextView.tag = IS_SHOWN
                         } else {
