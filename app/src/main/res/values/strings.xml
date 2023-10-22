@@ -27,5 +27,6 @@
     <string name="description_permission_internet">This permission is necessary to send the message to the AWS server and get a response (which is the whole purpose of this app…).</string>
     <string name="title_permission_internet">Complete Internet Access</string>
     <string name="description_about_me">This application has been created and is maintained up to date by Hugo Pothieux (me :)) as a side project to try and facilitate training when learning a new language. \n\n<b>Contact me</b>\nIf you have any question, suggestion or if you found a bug, you can contact me via this email address : <a href="langbot@proton.me">langbot@proton.me</a>.</string>
-    <string name="description_opensource_libraries">com.squareup.okhttp3:okhttp:4.11.0</string>
+    <string name="description_opensource_libraries" translatable="false">com.squareup.okhttp3:okhttp:4.11.0</string>
+    <string name="mistake">"You made some mistakes in your last message. The correct spelling is : "</string>
 </resources>

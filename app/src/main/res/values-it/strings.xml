@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LangBot</string>
+    <string name="native_language">Madrelingua</string>
+    <string name="parameters">Parametri</string>
+    <string name="erase_current_conversation">Cancella la conversazione corrente</string>
+    <string name="yes">SÌ</string>
+    <string name="no">NO</string>
+    <string name="language_to_learn_subtitle">Seleziona la lingua che vuoi imparare</string>
+    <string name="nativelanguage_subtitle">Seleziona la tua lingua madre</string>
+    <string name="tutorial">Esercitazione</string>
+    <string name="about">A proposito</string>
+    <string name="title_privacy_policy">Politica sulla riservatezza</string>
+    <string name="title_permissions">Autorizzazioni</string>
+    <string name="text_application_logo">Logo dell\'applicazione</string>
+    <string name="mistake">"Hai fatto degli errori nel tuo ultimo messaggio. L'ortografia corretta è : "</string>
+</resources>

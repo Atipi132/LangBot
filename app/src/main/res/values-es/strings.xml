@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LangBot</string>
+    <string name="native_language">Lengua materna</string>
+    <string name="parameters">Ajustes</string>
+    <string name="erase_current_conversation">Borrar conversación actual</string>
+    <string name="yes">SÍ</string>
+    <string name="no">NO</string>
+    <string name="language_to_learn_subtitle">Selecciona el idioma que quieres aprender</string>
+    <string name="nativelanguage_subtitle">Selecciona tu lengua materna</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="about">A proposito</string>
+    <string name="title_privacy_policy">Política de privacidad</string>
+    <string name="title_permissions">Permisos</string>
+    <string name="text_application_logo">Logotipo de la aplicación</string>
+    <string name="mistake">"Cometiste algunos errores en tu último mensaje. La ortografía correcta es : "</string>
+</resources>

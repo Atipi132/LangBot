@@ -1,6 +1,8 @@
 package com.ramsesandco.langbot
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.util.Log
@@ -32,6 +34,7 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.SocketTimeoutException
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 
@@ -283,7 +286,8 @@ class MainActivity : AppCompatActivity() {
                     userTextView.tag = IS_HIDDEN
                     userCardView.setOnClickListener {
                         if (userTextView.tag == IS_HIDDEN) {
-                            userTextView.append("\n----------------------------------\n${mistake}")
+                            if (listOf("en", "fr", "it", "es").contains(nativeLanguageAbbreviation)) userTextView.append("\n----------------------------------\n${getLocalizedString(applicationContext, Locale(nativeLanguageAbbreviation), R.string.mistake) + mistake}")
+                            else userTextView.append("\n----------------------------------\n$mistake")
                             userTextView.tag = IS_SHOWN
                         } else {
                             userTextView.text = currentText
@@ -293,6 +297,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             newCardView.setOnLongClickListener {
+//                TODO Add code to copy message to clipboard when long click from user
                 true
             }
         }
@@ -383,11 +388,11 @@ class MainActivity : AppCompatActivity() {
         messages.add(systemPrompt)
     }
 
-//    private fun getLocalizedString(context: Context, desiredLocale: Locale?, id: Int): String {
-//        var conf = context.resources.configuration
-//        conf = Configuration(conf)
-//        conf.setLocale(desiredLocale)
-//        val localizedContext = context.createConfigurationContext(conf)
-//        return localizedContext.resources.getString(id)
-//    }
+    private fun getLocalizedString(context: Context, desiredLocale: Locale?, id: Int): String {
+        var conf = context.resources.configuration
+        conf = Configuration(conf)
+        conf.setLocale(desiredLocale)
+        val localizedContext = context.createConfigurationContext(conf)
+        return localizedContext.resources.getString(id)
+    }
 }
