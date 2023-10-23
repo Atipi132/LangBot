@@ -344,15 +344,21 @@ class MainActivity : AppCompatActivity() {
                     }
                 },
                 10000)
-            var response = Response.Builder().request(request).protocol(Protocol.HTTP_2).message("hello").code(408).build()
+            var response = Response.Builder().request(request).protocol(Protocol.HTTP_2).message("Error").code(408).build()
             response = try {
                 client.newCall(request).execute()
             } catch (e: SocketTimeoutException) {
-                response.newBuilder().request(request).protocol(Protocol.HTTP_2).body("Error 408 : TimeOut exception".toResponseBody(mediaType)).message("hello").code(408).build()
+                response.newBuilder().request(request).protocol(Protocol.HTTP_2).body("Error 408 : TimeOut exception".toResponseBody(mediaType)).message("Error").code(408).build()
             }
             if (response.code == 200) {
                 val stringResponse = JSONObject(response.body?.string()!!)
                 val responseMessage = stringResponse.getString("messages")
+                val diffArray = JSONArray(stringResponse.getString("diff"))
+                for (i in 0 until diffArray.length()) {
+                    Log.d("MISTAKES LOG", "${diffArray.getJSONObject(i).getString("id")}, ${diffArray.getJSONObject(i).getString("text")}")
+                }
+                // TODO Handle the diff to add bold text where necessary and maybe strikethrough text
+
                 runOnUiThread { createNewText(responseMessage, ASSISTANT) }
                 Log.d("Request response message : ", responseMessage)
             } else {
