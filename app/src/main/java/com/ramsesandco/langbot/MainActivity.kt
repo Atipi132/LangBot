@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.text.Spannable
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
     private var systemPrompt = ""
     private var gridLine = 0
     private var messages = mutableListOf<String>()
+    private var diffsList = mutableListOf<String>()
     private var dictMessageId = mutableMapOf<Int, Int>()
 
     @Override
@@ -110,12 +113,25 @@ class MainActivity : AppCompatActivity() {
         Log.d("systemPrompt", systemPrompt)
 
         var messagesJson = JSONArray()
-        val jsonLoad =  loadJson("json$languageToLearn|$nativeLanguage")
-        if (jsonLoad!!.isNotEmpty()) { messagesJson = JSONArray(jsonLoad) }
+        var diffsJson = JSONArray()
+        val messagesLoad =  loadJson("json$languageToLearn|$nativeLanguage")
+        val diffsLoad = loadJson("diffs$languageToLearn|$nativeLanguage")
+//        Log.d("messagesLoad Log", messagesLoad!!)
+//        Log.d("diffsLoad Log", diffsLoad!!)
+        if (messagesLoad!!.isNotEmpty()) messagesJson = JSONArray(messagesLoad)
+        if (diffsLoad!!.isNotEmpty()) diffsJson = JSONArray(diffsLoad)
         messages.add(systemPrompt)
 
-        for (i in 1 until messagesJson.length()) {
-            createNewText(JSONObject(messagesJson.getString(i)).getString("content"), JSONObject(messagesJson.getString(i)).getString("role"))
+        var diffId = 0
+        for (i in 1 until messagesJson.length())
+        {
+            val sender = JSONObject(messagesJson.getString(i)).getString("role")
+            if (sender == ASSISTANT) {
+                val mistakeStrBuilder = diffArrayToSpannable(diffsJson.getJSONArray(diffId))
+                diffId++
+                createNewText(JSONObject(messagesJson.getString(i)).getString("content"), mistakeStrBuilder, sender)
+            }
+            else createNewText(JSONObject(messagesJson.getString(i)).getString("content"), sender = sender)
         }
 
         val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -150,7 +166,7 @@ class MainActivity : AppCompatActivity() {
         submitButton.setOnClickListener {
             val messageEditText = findViewById<EditText>(R.id.message_edit_text)
             if (messageEditText.text.isNotEmpty()) {
-                createNewText(messageEditText.text.toString(), USER)
+                createNewText(messageEditText.text.toString(), sender = USER)
                 messageEditText.setText("")
                 getMessageFromAI()
             }
@@ -199,7 +215,7 @@ class MainActivity : AppCompatActivity() {
                     .setMessage(R.string.erase_current_conversation)
                     .setPositiveButton(
                         getString(R.string.yes)
-                    ) { _, _ -> eraseCurrentConversation("json$languageToLearn|$nativeLanguage") }
+                    ) { _, _ -> eraseCurrentConversation("$languageToLearn|$nativeLanguage") }
                     .setNegativeButton(getString(R.string.no), null)  // A null listener allows the button to dismiss the dialog and take no further action.
                     .show()
                 true
@@ -229,7 +245,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun createNewText(message : String, sender : String) {
+    private fun addDiffArrayToPreferences(diffArray: JSONArray){
+        diffsList.add(diffArray.toString())
+        Log.d("DiffsList Log", diffsList.toString())
+        saveJson("diffs$languageToLearn|$nativeLanguage", diffsList.toString())
+
+    }
+
+    private fun createNewText(message : String, mistake: SpannableStringBuilder = SpannableStringBuilder(),sender : String) {
         val jsonMessages = if (sender == ASSISTANT) message.split('|') else listOf()
         val cardParams = GridLayout.LayoutParams(GridLayout.spec(gridLine), GridLayout.spec(0))
         cardParams.setGravity(if (sender == USER) Gravity.END else Gravity.START)
@@ -277,8 +300,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             if (jsonMessages.size >= 2) {
-                val mistake = jsonMessages[MISTAKE]
-                if (mistake.replace("/", "").replace(" ", "") != "") {
+                val mistakeMessage = jsonMessages[MISTAKE]
+                if (mistakeMessage.replace("/", "").replace(" ", "") != "") {
                     val userTextView = findViewById<TextView>(dictMessageId[gridLine - 1]!!)
                     val userCardView = userTextView.parent as CardView
                     val currentText = userTextView.text
@@ -286,8 +309,15 @@ class MainActivity : AppCompatActivity() {
                     userTextView.tag = IS_HIDDEN
                     userCardView.setOnClickListener {
                         if (userTextView.tag == IS_HIDDEN) {
-                            if (listOf("en", "fr", "it", "es").contains(learnLanguageAbbreviation)) userTextView.append("\n----------------------------------\n${getLocalizedString(applicationContext, Locale(nativeLanguageAbbreviation), R.string.mistake) + mistake}")
-                            else userTextView.append("\n----------------------------------\n$mistake")
+                            if (listOf("en", "fr", "it", "es").contains(learnLanguageAbbreviation)) {
+                                userTextView.text = SpannableStringBuilder(userTextView.text).append("\n----------------------------------\n${
+                                    getLocalizedString(
+                                        applicationContext,
+                                        Locale(nativeLanguageAbbreviation),
+                                        R.string.mistake
+                                    )}").append(mistake)
+                            }
+                            else userTextView.text = SpannableStringBuilder(userTextView.text).append("\n----------------------------------\n$mistake")
                             userTextView.tag = IS_SHOWN
                         } else {
                             userTextView.text = currentText
@@ -337,7 +367,7 @@ class MainActivity : AppCompatActivity() {
                     sendButton.setOnClickListener {
                         val messageEditText = findViewById<EditText>(R.id.message_edit_text)
                         if (messageEditText.text.isNotEmpty()) {
-                            createNewText(messageEditText.text.toString(), USER)
+                            createNewText(messageEditText.text.toString(), sender = USER)
                             messageEditText.setText("")
                             getMessageFromAI()
                         }
@@ -352,14 +382,15 @@ class MainActivity : AppCompatActivity() {
             }
             if (response.code == 200) {
                 val stringResponse = JSONObject(response.body?.string()!!)
-                val responseMessage = stringResponse.getString("messages")
+                var responseMessage = stringResponse.getString("messages")
+                val responseMessageList = responseMessage.split("|").toMutableList()
                 val diffArray = JSONArray(stringResponse.getString("diff"))
-                for (i in 0 until diffArray.length()) {
-                    Log.d("MISTAKES LOG", "${diffArray.getJSONObject(i).getString("id")}, ${diffArray.getJSONObject(i).getString("text")}")
-                }
-                // TODO Handle the diff to add bold text where necessary and maybe strikethrough text
+                val mistakeStrBuild = diffArrayToSpannable(diffArray)
+                responseMessageList[1] = mistakeStrBuild.toString()
+                responseMessage = responseMessageList.joinToString("|")
 
-                runOnUiThread { createNewText(responseMessage, ASSISTANT) }
+                runOnUiThread { createNewText(responseMessage, mistakeStrBuild, ASSISTANT) }
+                addDiffArrayToPreferences(diffArray)
                 Log.d("Request response message : ", responseMessage)
             } else {
                 runOnUiThread { Toast.makeText(applicationContext, "An error occured while sending/receiving response.", Toast.LENGTH_LONG).show()
@@ -387,8 +418,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun eraseCurrentConversation(preferenceKey: String) {
-        deleteJson(preferenceKey)
+        deleteJson("json$preferenceKey")
+        deleteJson("diffs$preferenceKey")
         messages.clear()
+        diffsList.clear()
         gridLine = 0
         findViewById<GridLayout>(R.id.grid_layout).removeAllViews()
         messages.add(systemPrompt)
@@ -401,4 +434,25 @@ class MainActivity : AppCompatActivity() {
         val localizedContext = context.createConfigurationContext(conf)
         return localizedContext.resources.getString(id)
     }
+
+    private fun diffArrayToSpannable(diffArray: JSONArray): SpannableStringBuilder {
+        val mistakeStrBuild = SpannableStringBuilder("")
+        var indexStart = 0
+        for (i in 0 until diffArray.length()) {
+            val id = diffArray.getJSONArray(i).getString(0)
+            val text = diffArray.getJSONArray(i).getString(1)
+            Log.d("Mistake Log", "$id, $text")
+            when(id) {
+                "1" -> {
+                    mistakeStrBuild.append(text)
+                    mistakeStrBuild.setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), indexStart, indexStart + text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                "0" -> mistakeStrBuild.append(text)
+                "-1" -> indexStart -= text.length
+            }
+            indexStart += text.length
+        }
+        return mistakeStrBuild
+    }
+
 }

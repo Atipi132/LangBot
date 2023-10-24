@@ -25,5 +25,5 @@
     <string name="description_permission_internet">Cette permission est nécessaire afin d\'envoyer le message au serveur AWS et de recevoir une réponse de celui-ci (ce qui est tout le but de cette appli…).</string>
     <string name="title_permission_internet">Accès complet à Internet</string>
     <string name="description_about_me">Cette application a été créée et est maintenue à jour par Hugo Pothieux (moi :)) pendant mon temps libre afin de faciliter l\'apprentissage de nouvelles langues. \n\n<b>Contact</b>\nSi vous avez des questions, suggestions ou si vous avez repéré des bugs, vous pouvez me contacter via cette adresse mail : <a href="langbot@proton.me">langbot@proton.me</a>.</string>
-    <string name="mistake">Vous avez commis des erreurs dans votre dernier message. L\'orthographe correcte est : </string>
+    <string name="mistake">Vous avez commis des erreurs dans votre dernier message. L\'orthographe correcte est : \n</string>
 </resources>
