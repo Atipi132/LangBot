@@ -9,7 +9,7 @@
     <string name="help">Help</string>
     <string name="language_to_learn">Language to learn</string>
     <string name="native_language">Native language</string>
-    <string name="parameters">Parameters</string>
+    <string name="parameters">Settings</string>
     <string name="erase_current_conversation">Erase current conversation</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
@@ -29,4 +29,6 @@
     <string name="description_about_me">This application has been created and is maintained up to date by Hugo Pothieux (me :)) as a side project to try and facilitate training when learning a new language. \n\n<b>Contact me</b>\nIf you have any question, suggestion or if you found a bug, you can contact me via this email address : <a href="langbot@proton.me">langbot@proton.me</a>.</string>
     <string name="description_opensource_libraries" translatable="false">com.squareup.okhttp3:okhttp:4.11.0</string>
     <string name="mistake">"You made some mistakes in your last message. The correct spelling is : "</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>

@@ -10,8 +10,6 @@ import android.text.SpannableStringBuilder
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.GridLayout
@@ -21,11 +19,14 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.widget.doOnTextChanged
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -68,6 +69,52 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        val drawerLayout = findViewById<DrawerLayout>(R.id.main_constraint_layout)
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        toolbar.setNavigationOnClickListener {
+            drawerLayout.open()
+        }
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.parameters -> {
+                    val chooseLanguagesIntent = Intent(this, ChooseLanguagesActivity::class.java)
+                    startActivity(chooseLanguagesIntent)
+                }
+
+                R.id.erase_current_conversation -> {
+                    AlertDialog.Builder(this)
+                        .setTitle("Erase conversation")
+                        .setMessage(R.string.erase_current_conversation)
+                        .setPositiveButton(
+                            getString(R.string.yes)
+                        ) { _, _ -> eraseCurrentConversation("$languageToLearn|$nativeLanguage") }
+                        .setNegativeButton(getString(R.string.no), null)  // A null listener allows the button to dismiss the dialog and take no further action.
+                        .show()
+                }
+
+                R.id.help -> {
+                    val tutorialIntent = Intent(this, TutorialActivity::class.java)
+                    startActivity(tutorialIntent)
+                }
+
+                R.id.about -> {
+                    val aboutIntent = Intent(this, AboutActivity::class.java)
+                    startActivity(aboutIntent)
+                }
+
+                else -> super.onOptionsItemSelected(menuItem)
+            }
+            menuItem.isChecked = true
+            drawerLayout.close()
+            true
+        }
+
+        val actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close)
+        drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        actionBarDrawerToggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 //        val languageToLearnList =
             loadJson("languageToLearn", "French|fr")!!.split("|").also {
@@ -190,50 +237,6 @@ class MainActivity : AppCompatActivity() {
             val tutorialIntent = Intent(this, TutorialActivity::class.java)
             saveJson("firstTime", "0")
             startActivity(tutorialIntent)
-        }
-    }
-
-    @Override
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.option_menu, menu) //your file name
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    @Override
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.choose_languages -> {
-                val chooseLanguagesIntent = Intent(this, ChooseLanguagesActivity::class.java)
-                startActivity(chooseLanguagesIntent)
-                true
-            }
-
-            R.id.erase_current_conversation -> {
-                AlertDialog.Builder(this)
-                    .setTitle("Erase conversation")
-                    .setMessage(R.string.erase_current_conversation)
-                    .setPositiveButton(
-                        getString(R.string.yes)
-                    ) { _, _ -> eraseCurrentConversation("$languageToLearn|$nativeLanguage") }
-                    .setNegativeButton(getString(R.string.no), null)  // A null listener allows the button to dismiss the dialog and take no further action.
-                    .show()
-                true
-            }
-
-            R.id.help -> {
-                val tutorialIntent = Intent(this, TutorialActivity::class.java)
-                startActivity(tutorialIntent)
-                true
-            }
-
-            R.id.about -> {
-                val aboutIntent = Intent(this, AboutActivity::class.java)
-                startActivity(aboutIntent)
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
