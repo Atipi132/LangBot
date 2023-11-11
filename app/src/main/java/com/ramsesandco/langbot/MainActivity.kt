@@ -160,13 +160,18 @@ class MainActivity : AppCompatActivity() {
         Log.d("systemPrompt", systemPrompt)
 
         var messagesJson = JSONArray()
-        var diffsJson = JSONArray()
+        var diffsArray = JSONArray()
         val messagesLoad =  loadJson("json$languageToLearn|$nativeLanguage")
         val diffsLoad = loadJson("diffs$languageToLearn|$nativeLanguage")
 //        Log.d("messagesLoad Log", messagesLoad!!)
 //        Log.d("diffsLoad Log", diffsLoad!!)
         if (messagesLoad!!.isNotEmpty()) messagesJson = JSONArray(messagesLoad)
-        if (diffsLoad!!.isNotEmpty()) diffsJson = JSONArray(diffsLoad)
+        if (diffsLoad!!.isNotEmpty()) {
+            diffsArray = JSONArray(diffsLoad)
+            for (i in 0 until diffsArray.length()) {
+                diffsList.add(diffsArray[i].toString())
+            }
+        }
         messages.add(systemPrompt)
 
         var diffId = 0
@@ -174,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         {
             val sender = JSONObject(messagesJson.getString(i)).getString("role")
             if (sender == ASSISTANT) {
-                val mistakeStrBuilder = diffArrayToSpannable(diffsJson.getJSONArray(diffId))
+                val mistakeStrBuilder = diffArrayToSpannable(diffsArray.getJSONArray(diffId))
                 diffId++
                 createNewText(JSONObject(messagesJson.getString(i)).getString("content"), mistakeStrBuilder, sender)
             }
@@ -245,13 +250,6 @@ class MainActivity : AppCompatActivity() {
         Log.d("Messages : ", messages.toString())
         val messagesJson = JSONArray(messages)
         saveJson("json$languageToLearn|$nativeLanguage", messagesJson.toString())
-
-    }
-
-    private fun addDiffArrayToPreferences(diffArray: JSONArray){
-        diffsList.add(diffArray.toString())
-        Log.d("DiffsList Log", diffsList.toString())
-        saveJson("diffs$languageToLearn|$nativeLanguage", diffsList.toString())
 
     }
 
@@ -393,7 +391,8 @@ class MainActivity : AppCompatActivity() {
                 responseMessage = responseMessageList.joinToString("|")
 
                 runOnUiThread { createNewText(responseMessage, mistakeStrBuild, ASSISTANT) }
-                addDiffArrayToPreferences(diffArray)
+                diffsList.add(diffArray.toString())
+                saveJson("diffs$languageToLearn|$nativeLanguage", diffsList.toString())
                 Log.d("Request response message : ", responseMessage)
             } else {
                 runOnUiThread { Toast.makeText(applicationContext, "An error occured while sending/receiving response.", Toast.LENGTH_LONG).show()
