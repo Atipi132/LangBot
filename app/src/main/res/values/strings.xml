@@ -31,4 +31,5 @@
     <string name="mistake">"You made some mistakes in your last message. The correct spelling is : "</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="clipboard_copy">Assistant message successfully copied to clipboard</string>
 </resources>

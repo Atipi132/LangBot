@@ -1,5 +1,7 @@
 package com.ramsesandco.langbot
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -18,6 +20,8 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -27,6 +31,10 @@ import androidx.cardview.widget.CardView
 import androidx.core.widget.doOnTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -128,31 +136,6 @@ class MainActivity : AppCompatActivity() {
             nativeLanguageAbbreviation = it[1]
         }
 
-//        val exampleQuestions = getLocalizedString(applicationContext, Locale(languageToLearnList[1]), R.string.example_question)
-//            .split("\", ")
-//            .toMutableList()
-//        exampleQuestions.forEachIndexed { index, s ->
-//            exampleQuestions[index] = s.replace("\"", "")
-//        }
-//
-//        val exampleResponsesLearn = getLocalizedString(applicationContext, Locale(languageToLearnList[1]), R.string.example_response)
-//            .split("\", ")
-//            .toMutableList()
-//        exampleResponsesLearn.forEachIndexed { index, s ->
-//            exampleResponsesLearn[index] = s.replace("\"", "").split("|")[0]
-//        }
-//
-//        val exampleResponsesNative = getLocalizedString(applicationContext, Locale(nativeLanguageList[1]), R.string.example_response)
-//            .split("\", ")
-//            .toMutableList()
-//            .also {
-//                Log.d("exampleResponsesNative", it.toString())
-//                it.forEachIndexed { index, s ->
-//                    Log.d("s$index", s)
-//                    it[index] = s.replace("\"", "").split("|", limit = 2)[1]
-//                }
-//            }
-
         systemPrompt = "{\"role\": \"system\", \"content\": \"You are an expert $languageToLearn AI teacher who teaches to a $nativeLanguage user. You are having a conversation with the user so must keep your messages shorter than 265 characters per parts. You MUST ALWAYS write you messages using the following structure with '|' to separate the differents parts of your answer : '''<Write your answer to the user's last message in $languageToLearn here. Try to keep the conversation going.>|<In $nativeLanguage, write a short explanation to any potential spelling, grammatical or conjugation mistake that the user made in his last message here. If and only if there was no mistake in the user's last message, only write '/'.>|<Finally, rewrite the FIRST PART of your answer the same way, but now translated into $nativeLanguage here.>'''.\"}"
 
         Log.d("nativeLanguagePreference", nativeLanguage)
@@ -186,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             else createNewText(JSONObject(messagesJson.getString(i)).getString("content"), sender = sender)
         }
 
-        val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val speechRecognizerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
                 val message = it.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)!![0]
                 findViewById<EditText>(R.id.message_edit_text).setText(message)
@@ -207,7 +190,7 @@ class MainActivity : AppCompatActivity() {
             )
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Please speak ")
             try {
-                launcher.launch(intent)
+                speechRecognizerLauncher.launch(intent)
             } catch (error: Exception) {
                 Toast.makeText(this@MainActivity, "Error : " + error.message, Toast.LENGTH_SHORT)
                     .show()
@@ -243,6 +226,20 @@ class MainActivity : AppCompatActivity() {
             saveJson("firstTime", "0")
             startActivity(tutorialIntent)
         }
+
+        val updateLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+            // handle callback
+            if (it.resultCode != RESULT_OK) {
+                Log.d(
+                    "LangBot Update Status",
+                    "Update flow failed! Result code: " + it.resultCode
+                )
+                // If the update is cancelled or fails,
+                // you can request to start the update again.
+            }
+        }
+
+        checkForUpdate(applicationContext, updateLauncher)
     }
 
     private fun addMessageToRequest(message: String, sender: String){
@@ -260,30 +257,40 @@ class MainActivity : AppCompatActivity() {
 
         val textParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
-        val newCardView = CardView(applicationContext)
-        newCardView.layoutParams = cardParams
-        val cardColor = if (sender == USER) R.color.usermessagecolor else R.color.assistantmessagecolor
-        newCardView.setCardBackgroundColor(getColor(cardColor))
-        newCardView.radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20F, resources.displayMetrics)
-        newCardView.cardElevation = 0F
-        newCardView.useCompatPadding = true
+        val newCardView = CardView(applicationContext).apply {
+            layoutParams = cardParams
+            val cardColor = if (sender == USER) R.color.usermessagecolor else R.color.assistantmessagecolor
+            setCardBackgroundColor(getColor(cardColor))
+            radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20F, resources.displayMetrics)
+            cardElevation = 0F
+            useCompatPadding = true
+        }
 
         val gridLayout = findViewById<GridLayout>(R.id.grid_layout)
 
-        val newTextView = TextView(applicationContext)
-        newTextView.id = View.generateViewId()
-        dictMessageId[gridLine] = newTextView.id
-        newTextView.layoutParams = textParams
-        newTextView.setPadding(
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12F, resources.displayMetrics).toInt(),
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8F, resources.displayMetrics).toInt(),
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12F, resources.displayMetrics).toInt(),
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8F, resources.displayMetrics).toInt()
-        )
-        newTextView.text = if (sender == ASSISTANT) jsonMessages[MESSAGE] else message
-        newTextView.setTextColor(getColor(R.color.black))
-        newTextView.maxEms = 12
-        newTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+        val newTextView = TextView(applicationContext).apply {
+            id = View.generateViewId()
+            dictMessageId[gridLine] = id
+            layoutParams = textParams
+            setPadding(
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12F, resources.displayMetrics).toInt(),
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8F, resources.displayMetrics).toInt(),
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12F, resources.displayMetrics).toInt(),
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8F, resources.displayMetrics).toInt()
+            )
+            text = if (sender == ASSISTANT) jsonMessages[MESSAGE] else message
+            setTextColor(getColor(R.color.black))
+            maxEms = 12
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+        }
+
+        newCardView.setOnLongClickListener {
+            val clipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Assistant message", newTextView.text)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(applicationContext, getString(R.string.clipboard_copy), Toast.LENGTH_SHORT).show()
+            true
+        }
 
         newCardView.addView(newTextView)
         if (sender == ASSISTANT) {
@@ -326,10 +333,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
-            newCardView.setOnLongClickListener {
-//                TODO Add code to copy message to clipboard when long click from user
-                true
             }
         }
         gridLayout.addView(newCardView)
@@ -455,6 +458,33 @@ class MainActivity : AppCompatActivity() {
             indexStart += text.length
         }
         return mistakeStrBuild
+    }
+
+    private fun checkForUpdate(context: Context, activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>) {
+        val appUpdateManager = AppUpdateManagerFactory.create(context)
+
+        // Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                // This example applies an immediate update. To apply a flexible update
+                // instead, pass in AppUpdateType.FLEXIBLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                // Request the update.
+                appUpdateManager.startUpdateFlowForResult(
+                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                    appUpdateInfo,
+                    // an activity result launcher registered via registerForActivityResult
+                    activityResultLauncher,
+                    // Or pass 'AppUpdateType.FLEXIBLE' to newBuilder() for
+                    // flexible updates.
+                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                )
+            }
+        }
     }
 
 }
